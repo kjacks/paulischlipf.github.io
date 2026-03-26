@@ -2,6 +2,7 @@
 title_en: Contact
 title_de: Kontakt
 email: paulischlipf@gmail.com
+instagram: https://www.instagram.com/paulischlipf
 body_en: |
   For enquiries regarding exhibitions, collaborations, or press, please get in touch by email.
 body_de: |

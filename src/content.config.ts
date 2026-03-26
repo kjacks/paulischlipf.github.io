@@ -55,6 +55,7 @@ const contact = defineCollection({
     title_en: z.string(),
     title_de: z.string(),
     email: z.string().optional(),
+    instagram: z.string().optional(),
     body_en: z.string().optional(),
     body_de: z.string().optional(),
   }),
