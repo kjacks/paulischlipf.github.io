@@ -28,6 +28,7 @@ const installations = defineCollection({
     description_de: z.string(),
     location_en: z.string().optional(),
     location_de: z.string().optional(),
+    body_en: z.string().optional(),
     body_de: z.string().optional(),
     date: z.coerce.date(),
     image: z.string().optional(),
@@ -42,6 +43,7 @@ const bio = defineCollection({
   schema: z.object({
     title_en: z.string(),
     title_de: z.string(),
+    body_en: z.string().optional(),
     body_de: z.string().optional(),
     image: z.string().optional(),
   }),
@@ -53,6 +55,7 @@ const contact = defineCollection({
     title_en: z.string(),
     title_de: z.string(),
     email: z.string().optional(),
+    body_en: z.string().optional(),
     body_de: z.string().optional(),
   }),
 });
