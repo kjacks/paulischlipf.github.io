@@ -1,0 +1,69 @@
+---
+import { getCollection } from "astro:content";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import {
+  useTranslations,
+  localePath,
+  alternateLang,
+  dateLocales,
+  type Lang,
+} from "../../../i18n/translations";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined }, props: { lang: "en" as const } },
+    { params: { lang: "de" }, props: { lang: "de" as const } },
+  ];
+}
+
+const { lang } = Astro.props as { lang: Lang };
+const t = useTranslations(lang);
+const prefix = localePath(lang);
+
+const paintings = (
+  await getCollection("paintings", ({ data }) => !data.draft)
+).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<SiteLayout
+  lang={lang}
+  title={t("paintings.title")}
+  altHref={`${localePath(alternateLang(lang))}/paintings`}
+>
+  <main>
+    <h1>{t("paintings.title")}</h1>
+    <ul>
+      {
+        paintings.map((painting) => (
+          <li>
+            <a href={`${prefix}/paintings/${painting.id}`}>
+              <strong>
+                {lang === "en"
+                  ? painting.data.title_en
+                  : painting.data.title_de}
+              </strong>
+              {lang === "en"
+                ? painting.data.medium_en && (
+                    <span> — {painting.data.medium_en}</span>
+                  )
+                : painting.data.medium_de && (
+                    <span> — {painting.data.medium_de}</span>
+                  )}
+            </a>
+            <p>
+              {lang === "en"
+                ? painting.data.description_en
+                : painting.data.description_de}
+            </p>
+            <time>
+              {painting.data.date.toLocaleDateString(dateLocales[lang], {
+                year: "numeric",
+                month: "long",
+              })}
+            </time>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</SiteLayout>

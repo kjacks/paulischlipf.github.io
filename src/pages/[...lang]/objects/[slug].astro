@@ -42,7 +42,6 @@ const bodyDeHtml = lang === "de" ? marked.parse(work.data.body_de ?? "") : "";
   altHref={`${localePath(alternateLang(lang))}/works/${work.id}`}
 >
   <main>
-    <a href={`${prefix}/works`}>{t("works.back")}</a>
     <article>
       <header>
         <h1>{title}</h1>

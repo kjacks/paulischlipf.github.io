@@ -11,41 +11,35 @@ import {
 } from "../../../i18n/translations";
 
 export async function getStaticPaths() {
-  const installations = await getCollection(
-    "installations",
-    ({ data }) => !data.draft,
-  );
+  const works = await getCollection("works", ({ data }) => !data.draft);
   const locales = [
     { lang: "en" as const, langParam: undefined },
     { lang: "de" as const, langParam: "de" },
   ];
   return locales.flatMap(({ lang, langParam }) =>
-    installations.map((installation) => ({
-      params: { lang: langParam, slug: installation.id },
-      props: { installation, lang },
+    works.map((work) => ({
+      params: { lang: langParam, slug: work.id },
+      props: { work, lang },
     })),
   );
 }
 
-const { installation, lang } = Astro.props as { installation: any; lang: Lang };
+const { work, lang } = Astro.props as { work: any; lang: Lang };
 const t = useTranslations(lang);
 const prefix = localePath(lang);
-const { Content } = await render(installation);
-const title =
-  lang === "en" ? installation.data.title_en : installation.data.title_de;
+const { Content } = await render(work);
+const title = lang === "en" ? work.data.title_en : work.data.title_de;
 const description =
-  lang === "en"
-    ? installation.data.description_en
-    : installation.data.description_de;
-const location =
-  lang === "en" ? installation.data.location_en : installation.data.location_de;
+  lang === "en" ? work.data.description_en : work.data.description_de;
+const medium = lang === "en" ? work.data.medium_en : work.data.medium_de;
+const bodyDeHtml = lang === "de" ? marked.parse(work.data.body_de ?? "") : "";
 ---
 
 <SiteLayout
   {lang}
   {title}
   {description}
-  altHref={`${localePath(alternateLang(lang))}/installations/${installation.id}`}
+  altHref={`${localePath(alternateLang(lang))}/works/${work.id}`}
 >
   <main>
     <article>
@@ -54,10 +48,10 @@ const location =
         <p>{description}</p>
         <dl>
           {
-            location && (
+            medium && (
               <>
-                <dt>{t("label.location")}</dt>
-                <dd>{location}</dd>
+                <dt>{t("label.medium")}</dt>
+                <dd>{medium}</dd>
               </>
             )
           }
@@ -65,7 +59,7 @@ const location =
           <dd>
             <time>
               {
-                installation.data.date.toLocaleDateString(dateLocales[lang], {
+                work.data.date.toLocaleDateString(dateLocales[lang], {
                   year: "numeric",
                   month: "long",
                 })
@@ -74,20 +68,16 @@ const location =
           </dd>
         </dl>
         {
-          installation.data.tags.length > 0 && (
+          work.data.tags.length > 0 && (
             <ul>
-              {installation.data.tags.map((tag: string) => (
+              {work.data.tags.map((tag: string) => (
                 <li>{tag}</li>
               ))}
             </ul>
           )
         }
       </header>
-      {
-        installation.data.image && (
-          <img src={installation.data.image} alt={title} />
-        )
-      }
+      {work.data.image && <img src={work.data.image} alt={title} />}
     </article>
   </main>
 </SiteLayout>

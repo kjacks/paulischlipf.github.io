@@ -20,37 +20,41 @@ const { lang } = Astro.props as { lang: Lang };
 const t = useTranslations(lang);
 const prefix = localePath(lang);
 
-const works = (await getCollection("works", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
+const objects = (
+  await getCollection("objects", ({ data }) => !data.draft)
+).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <SiteLayout
   lang={lang}
-  title={t("works.title")}
-  altHref={`${localePath(alternateLang(lang))}/works`}
+  title={t("objects.title")}
+  altHref={`${localePath(alternateLang(lang))}/objects`}
 >
   <main>
-    <h1>{t("works.title")}</h1>
+    <h1>{t("objects.title")}</h1>
     <ul>
       {
-        works.map((work) => (
+        objects.map((object) => (
           <li>
-            <a href={`${prefix}/works/${work.id}`}>
+            <a href={`${prefix}/objects/${object.id}`}>
               <strong>
-                {lang === "en" ? work.data.title_en : work.data.title_de}
+                {lang === "en" ? object.data.title_en : object.data.title_de}
               </strong>
               {lang === "en"
-                ? work.data.medium_en && <span> — {work.data.medium_en}</span>
-                : work.data.medium_de && <span> — {work.data.medium_de}</span>}
+                ? object.data.medium_en && (
+                    <span> — {object.data.medium_en}</span>
+                  )
+                : object.data.medium_de && (
+                    <span> — {object.data.medium_de}</span>
+                  )}
             </a>
             <p>
               {lang === "en"
-                ? work.data.description_en
-                : work.data.description_de}
+                ? object.data.description_en
+                : object.data.description_de}
             </p>
             <time>
-              {work.data.date.toLocaleDateString(dateLocales[lang], {
+              {object.data.date.toLocaleDateString(dateLocales[lang], {
                 year: "numeric",
                 month: "long",
               })}
