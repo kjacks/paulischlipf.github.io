@@ -1,0 +1,86 @@
+media:
+  input: public/uploads
+  output: /uploads
+
+content:
+  - name: works
+    label: Works
+    path: src/content/works
+    type: collection
+    view:
+      fields: [title, date, medium, featured]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: medium
+        label: Medium
+        type: string
+      - name: image
+        label: Image
+        type: image
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: featured
+        label: Featured
+        type: boolean
+        default: false
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+      - name: body
+        label: Content
+        type: rich-text
+
+  - name: installations
+    label: Installations
+    path: src/content/installations
+    type: collection
+    view:
+      fields: [title, date, location, featured]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: string
+        required: true
+      - name: date
+        label: Date
+        type: date
+        required: true
+      - name: location
+        label: Location
+        type: string
+      - name: image
+        label: Image
+        type: image
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: featured
+        label: Featured
+        type: boolean
+        default: false
+      - name: draft
+        label: Draft
+        type: boolean
+        default: false
+      - name: body
+        label: Content
+        type: rich-text

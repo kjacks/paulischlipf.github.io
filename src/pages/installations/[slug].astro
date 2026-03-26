@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const installations = await getCollection('installations', ({ data }) => !data.draft);
+  return installations.map((installation) => ({
+    params: { slug: installation.id },
+    props: { installation },
+  }));
+}
+
+const { installation } = Astro.props;
+const { Content } = await render(installation);
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={installation.data.description} />
+    <title>{installation.data.title}</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/works">Works</a>
+      <a href="/installations">Installations</a>
+    </nav>
+
+    <main>
+      <a href="/installations">← Installations</a>
+      <article>
+        <header>
+          <h1>{installation.data.title}</h1>
+          <p>{installation.data.description}</p>
+          <dl>
+            {installation.data.location && (
+              <>
+                <dt>Location</dt>
+                <dd>{installation.data.location}</dd>
+              </>
+            )}
+            <dt>Date</dt>
+            <dd>
+              <time>{installation.data.date.toLocaleDateString('en-AU', { year: 'numeric', month: 'long' })}</time>
+            </dd>
+          </dl>
+          {installation.data.tags.length > 0 && (
+            <ul>
+              {installation.data.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          )}
+        </header>
+        {installation.data.image && <img src={installation.data.image} alt={installation.data.title} />}
+        <Content />
+      </article>
+    </main>
+  </body>
+</html>
