@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
+import { useTranslations } from '../../../i18n/translations';
+
+export async function getStaticPaths() {
+  const installations = await getCollection('installations', ({ data }) => !data.draft);
+  return installations.map((installation) => ({
+    params: { slug: installation.id },
+    props: { installation },
+  }));
+}
+
+const { installation } = Astro.props;
+const t = useTranslations('de');
+const bodyDeHtml = marked.parse(installation.data.body_de ?? '');
+---
+
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={installation.data.description_de} />
+    <title>{installation.data.title_de}</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/de">{t('nav.home')}</a>
+      <a href="/de/works">{t('nav.works')}</a>
+      <a href="/de/installations">{t('nav.installations')}</a>
+      <a href={`/installations/${installation.id}`} lang="en">English</a>
+    </nav>
+
+    <main>
+      <a href="/de/installations">{t('installations.back')}</a>
+      <article>
+        <header>
+          <h1>{installation.data.title_de}</h1>
+          <p>{installation.data.description_de}</p>
+          <dl>
+            {installation.data.location_de && (
+              <>
+                <dt>{t('label.location')}</dt>
+                <dd>{installation.data.location_de}</dd>
+              </>
+            )}
+            <dt>{t('label.date')}</dt>
+            <dd>
+              <time>{installation.data.date.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' })}</time>
+            </dd>
+          </dl>
+          {installation.data.tags.length > 0 && (
+            <ul>
+              {installation.data.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          )}
+        </header>
+        {installation.data.image && <img src={installation.data.image} alt={installation.data.title_de} />}
+        <div set:html={bodyDeHtml} />
+      </article>
+    </main>
+  </body>
+</html>

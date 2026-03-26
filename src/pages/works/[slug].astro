@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { useTranslations } from '../../i18n/translations';
 
 export async function getStaticPaths() {
   const works = await getCollection('works', ({ data }) => !data.draft);
@@ -11,36 +12,38 @@ export async function getStaticPaths() {
 
 const { work } = Astro.props;
 const { Content } = await render(work);
+const t = useTranslations('en');
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={work.data.description} />
-    <title>{work.data.title}</title>
+    <meta name="description" content={work.data.description_en} />
+    <title>{work.data.title_en}</title>
   </head>
   <body>
     <nav>
-      <a href="/">Home</a>
-      <a href="/works">Works</a>
-      <a href="/installations">Installations</a>
+      <a href="/">{t('nav.home')}</a>
+      <a href="/works">{t('nav.works')}</a>
+      <a href="/installations">{t('nav.installations')}</a>
+      <a href={`/de/works/${work.id}`} lang="de">Deutsch</a>
     </nav>
 
     <main>
-      <a href="/works">← Works</a>
+      <a href="/works">{t('works.back')}</a>
       <article>
         <header>
-          <h1>{work.data.title}</h1>
-          <p>{work.data.description}</p>
+          <h1>{work.data.title_en}</h1>
+          <p>{work.data.description_en}</p>
           <dl>
-            {work.data.medium && (
+            {work.data.medium_en && (
               <>
-                <dt>Medium</dt>
-                <dd>{work.data.medium}</dd>
+                <dt>{t('label.medium')}</dt>
+                <dd>{work.data.medium_en}</dd>
               </>
             )}
-            <dt>Date</dt>
+            <dt>{t('label.date')}</dt>
             <dd>
               <time>{work.data.date.toLocaleDateString('en-AU', { year: 'numeric', month: 'long' })}</time>
             </dd>
@@ -51,7 +54,7 @@ const { Content } = await render(work);
             </ul>
           )}
         </header>
-        {work.data.image && <img src={work.data.image} alt={work.data.title} />}
+        {work.data.image && <img src={work.data.image} alt={work.data.title_en} />}
         <Content />
       </article>
     </main>

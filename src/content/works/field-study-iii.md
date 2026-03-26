@@ -1,10 +1,20 @@
 ---
-title: "Field Study III"
-description: "A series of large-format photographs documenting the erosion patterns of coastal cliffs over eighteen months."
+title_en: "Field Study III"
+title_de: "Feldstudie III"
+description_en: "A series of large-format photographs documenting the erosion patterns of coastal cliffs over eighteen months."
+description_de: "Eine Serie von Großformatfotografien, die über achtzehn Monate hinweg die Erosionsmuster von Küstenklippen dokumentieren."
+medium_en: "Large-format photography, archival pigment print"
+medium_de: "Großformatfotografie, Archivpigmentdruck"
 date: 2025-09-10
-medium: "Large-format photography, archival pigment print"
 tags: ["photography", "landscape", "time"]
 featured: false
+draft: false
+body_de: |
+  # Feldstudie III
+
+  Über achtzehn Monate hinweg am selben Ort aufgenommen, erfassen diese Fotografien schrittweise Transformationen, die bei einem einzelnen Besuch unsichtbar sind. Die Kliffwand wird zu einem Dokument — einer Aufzeichnung von Wetter, Jahreszeiten und langsamem Verfall.
+
+  Im Maßstab 1:1 mit dem Originalnegativ gedruckt, bewahrt jedes Bild Details, die zum Zeitpunkt der Belichtung mit bloßem Auge nicht sichtbar waren.
 ---
 
 # Field Study III

@@ -8,63 +8,79 @@ content:
     path: src/content/works
     type: collection
     view:
-      fields: [title, date, medium, size]
+      fields: [title_en, date, medium_en]
     fields:
-      - name: title
-        label: Title
+      - name: title_en
+        label: Title (English)
         type: string
         required: true
-      - name: description
-        label: Description
+      - name: title_de
+        label: Titel (Deutsch)
+        type: string
+        required: true
+      - name: description_en
+        label: Description (English)
+        type: rich-text
+        required: false
+      - name: description_de
+        label: Beschreibung (Deutsch)
         type: rich-text
         required: false
       - name: date
-        label: Date
+        label: Date / Datum
         type: date
         required: false
-      - name: medium
-        label: Medium
+      - name: medium_en
+        label: Medium (English)
         type: string
-      - name: size
-        label: Size
+      - name: medium_de
+        label: Medium (Deutsch)
         type: string
       - name: image
-        label: Image
+        label: Image / Bild
         type: image
-      - name: draft
-        label: Draft
-        type: boolean
-        default: false
+
 
   - name: installations
-    label: Installations
+    label: Installations / Installationen
     path: src/content/installations
     type: collection
     view:
-      fields: [title, date, medium, size]
+      fields: [title_en, date, location_en]
     fields:
-      - name: title
-        label: Title
+      - name: title_en
+        label: Title (English)
         type: string
         required: true
-      - name: description
-        label: Description
+      - name: title_de
+        label: Titel (Deutsch)
+        type: string
+        required: true
+      - name: description_en
+        label: Description (English)
+        type: rich-text
+        required: false
+      - name: description_de
+        label: Beschreibung (Deutsch)
         type: rich-text
         required: false
       - name: date
-        label: Date
+        label: Date / Datum
         type: date
         required: false
-      - name: medium
-        label: Medium
+      - name: medium_en
+        label: Medium (English)
         type: string
-      - name: size
-        label: Size
+      - name: medium_de
+        label: Medium (Deutsch)
         type: string
       - name: image
-        label: Image
+        label: Image / Bild
         type: image
-      - name: draft
-        label: Draft
-        type: boolean
-        default: false
+      - name: location_en
+        label: Location (English)
+        type: string
+      - name: location_de
+        label: Location (Deutsch)
+        type: string
+

@@ -1,5 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/translations';
+const t = useTranslations('en');
 
 const installations = (await getCollection('installations', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -9,25 +11,26 @@ const installations = (await getCollection('installations', ({ data }) => !data.
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Installations</title>
+    <title>{t('installations.title')}</title>
   </head>
   <body>
     <nav>
-      <a href="/">Home</a>
-      <a href="/works">Works</a>
-      <a href="/installations">Installations</a>
+      <a href="/">{t('nav.home')}</a>
+      <a href="/works">{t('nav.works')}</a>
+      <a href="/installations">{t('nav.installations')}</a>
+      <a href="/de/installations" lang="de">Deutsch</a>
     </nav>
 
     <main>
-      <h1>Installations</h1>
+      <h1>{t('installations.title')}</h1>
       <ul>
         {installations.map((installation) => (
           <li>
             <a href={`/installations/${installation.id}`}>
-              <strong>{installation.data.title}</strong>
-              {installation.data.location && <span> — {installation.data.location}</span>}
+              <strong>{installation.data.title_en}</strong>
+              {installation.data.location_en && <span> — {installation.data.location_en}</span>}
             </a>
-            <p>{installation.data.description}</p>
+            <p>{installation.data.description_en}</p>
             <time>{installation.data.date.toLocaleDateString('en-AU', { year: 'numeric', month: 'long' })}</time>
           </li>
         ))}

@@ -1,5 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
+import { useTranslations } from '../../i18n/translations';
+const t = useTranslations('en');
 
 const works = (await getCollection('works', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -9,25 +11,26 @@ const works = (await getCollection('works', ({ data }) => !data.draft))
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Works</title>
+    <title>{t('works.title')}</title>
   </head>
   <body>
     <nav>
-      <a href="/">Home</a>
-      <a href="/works">Works</a>
-      <a href="/installations">Installations</a>
+      <a href="/">{t('nav.home')}</a>
+      <a href="/works">{t('nav.works')}</a>
+      <a href="/installations">{t('nav.installations')}</a>
+      <a href="/de/works" lang="de">Deutsch</a>
     </nav>
 
     <main>
-      <h1>Works</h1>
+      <h1>{t('works.title')}</h1>
       <ul>
         {works.map((work) => (
           <li>
             <a href={`/works/${work.id}`}>
-              <strong>{work.data.title}</strong>
-              {work.data.medium && <span> — {work.data.medium}</span>}
+              <strong>{work.data.title_en}</strong>
+              {work.data.medium_en && <span> — {work.data.medium_en}</span>}
             </a>
-            <p>{work.data.description}</p>
+            <p>{work.data.description_en}</p>
             <time>{work.data.date.toLocaleDateString('en-AU', { year: 'numeric', month: 'long' })}</time>
           </li>
         ))}

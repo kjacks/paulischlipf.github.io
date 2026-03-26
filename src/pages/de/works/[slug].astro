@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import { marked } from 'marked';
+import { useTranslations } from '../../../i18n/translations';
+
+export async function getStaticPaths() {
+  const works = await getCollection('works', ({ data }) => !data.draft);
+  return works.map((work) => ({
+    params: { slug: work.id },
+    props: { work },
+  }));
+}
+
+const { work } = Astro.props;
+const t = useTranslations('de');
+const bodyDeHtml = marked.parse(work.data.body_de ?? '');
+---
+
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={work.data.description_de} />
+    <title>{work.data.title_de}</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/de">{t('nav.home')}</a>
+      <a href="/de/works">{t('nav.works')}</a>
+      <a href="/de/installations">{t('nav.installations')}</a>
+      <a href={`/works/${work.id}`} lang="en">English</a>
+    </nav>
+
+    <main>
+      <a href="/de/works">{t('works.back')}</a>
+      <article>
+        <header>
+          <h1>{work.data.title_de}</h1>
+          <p>{work.data.description_de}</p>
+          <dl>
+            {work.data.medium_de && (
+              <>
+                <dt>{t('label.medium')}</dt>
+                <dd>{work.data.medium_de}</dd>
+              </>
+            )}
+            <dt>{t('label.date')}</dt>
+            <dd>
+              <time>{work.data.date.toLocaleDateString('de-DE', { year: 'numeric', month: 'long' })}</time>
+            </dd>
+          </dl>
+          {work.data.tags.length > 0 && (
+            <ul>
+              {work.data.tags.map((tag) => <li>{tag}</li>)}
+            </ul>
+          )}
+        </header>
+        {work.data.image && <img src={work.data.image} alt={work.data.title_de} />}
+        <div set:html={bodyDeHtml} />
+      </article>
+    </main>
+  </body>
+</html>

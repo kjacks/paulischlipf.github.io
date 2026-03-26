@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { useTranslations } from '../../i18n/translations';
 
 export async function getStaticPaths() {
   const installations = await getCollection('installations', ({ data }) => !data.draft);
@@ -11,36 +12,38 @@ export async function getStaticPaths() {
 
 const { installation } = Astro.props;
 const { Content } = await render(installation);
+const t = useTranslations('en');
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={installation.data.description} />
-    <title>{installation.data.title}</title>
+    <meta name="description" content={installation.data.description_en} />
+    <title>{installation.data.title_en}</title>
   </head>
   <body>
     <nav>
-      <a href="/">Home</a>
-      <a href="/works">Works</a>
-      <a href="/installations">Installations</a>
+      <a href="/">{t('nav.home')}</a>
+      <a href="/works">{t('nav.works')}</a>
+      <a href="/installations">{t('nav.installations')}</a>
+      <a href={`/de/installations/${installation.id}`} lang="de">Deutsch</a>
     </nav>
 
     <main>
-      <a href="/installations">← Installations</a>
+      <a href="/installations">{t('installations.back')}</a>
       <article>
         <header>
-          <h1>{installation.data.title}</h1>
-          <p>{installation.data.description}</p>
+          <h1>{installation.data.title_en}</h1>
+          <p>{installation.data.description_en}</p>
           <dl>
-            {installation.data.location && (
+            {installation.data.location_en && (
               <>
-                <dt>Location</dt>
-                <dd>{installation.data.location}</dd>
+                <dt>{t('label.location')}</dt>
+                <dd>{installation.data.location_en}</dd>
               </>
             )}
-            <dt>Date</dt>
+            <dt>{t('label.date')}</dt>
             <dd>
               <time>{installation.data.date.toLocaleDateString('en-AU', { year: 'numeric', month: 'long' })}</time>
             </dd>
@@ -51,7 +54,7 @@ const { Content } = await render(installation);
             </ul>
           )}
         </header>
-        {installation.data.image && <img src={installation.data.image} alt={installation.data.title} />}
+        {installation.data.image && <img src={installation.data.image} alt={installation.data.title_en} />}
         <Content />
       </article>
     </main>
