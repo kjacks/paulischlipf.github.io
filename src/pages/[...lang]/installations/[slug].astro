@@ -1,79 +1,97 @@
 ---
-import { getCollection, render } from 'astro:content';
-import { marked } from 'marked';
-import { useTranslations, localePath, alternateLang, languages, dateLocales, type Lang } from '../../../i18n/translations';
+import { getCollection, render } from "astro:content";
+import { marked } from "marked";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import {
+  useTranslations,
+  localePath,
+  alternateLang,
+  dateLocales,
+  type Lang,
+} from "../../../i18n/translations";
 
 export async function getStaticPaths() {
-  const installations = await getCollection('installations', ({ data }) => !data.draft);
+  const installations = await getCollection(
+    "installations",
+    ({ data }) => !data.draft,
+  );
   const locales = [
-    { lang: 'en' as const, langParam: undefined },
-    { lang: 'de' as const, langParam: 'de' },
+    { lang: "en" as const, langParam: undefined },
+    { lang: "de" as const, langParam: "de" },
   ];
   return locales.flatMap(({ lang, langParam }) =>
     installations.map((installation) => ({
       params: { lang: langParam, slug: installation.id },
       props: { installation, lang },
-    }))
+    })),
   );
 }
 
 const { installation, lang } = Astro.props as { installation: any; lang: Lang };
 const t = useTranslations(lang);
 const prefix = localePath(lang);
-const altLang = alternateLang(lang);
-const altPrefix = localePath(altLang);
-
 const { Content } = await render(installation);
-const title = lang === 'en' ? installation.data.title_en : installation.data.title_de;
-const description = lang === 'en' ? installation.data.description_en : installation.data.description_de;
-const location = lang === 'en' ? installation.data.location_en : installation.data.location_de;
-const bodyDeHtml = lang === 'de' ? marked.parse(installation.data.body_de ?? '') : '';
+const title =
+  lang === "en" ? installation.data.title_en : installation.data.title_de;
+const description =
+  lang === "en"
+    ? installation.data.description_en
+    : installation.data.description_de;
+const location =
+  lang === "en" ? installation.data.location_en : installation.data.location_de;
+const bodyDeHtml =
+  lang === "de" ? marked.parse(installation.data.body_de ?? "") : "";
 ---
 
-<html lang={lang}>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <title>{title}</title>
-  </head>
-  <body>
-    <nav>
-      <a href={`${prefix}/`}>{t('nav.home')}</a>
-      <a href={`${prefix}/works`}>{t('nav.works')}</a>
-      <a href={`${prefix}/installations`}>{t('nav.installations')}</a>
-      <a href={`${prefix}/bio`}>{t('nav.bio')}</a>
-      <a href={`${prefix}/contact`}>{t('nav.contact')}</a>
-      <a href={`${altPrefix}/installations/${installation.id}`} lang={altLang}>{languages[altLang]}</a>
-    </nav>
-
-    <main>
-      <a href={`${prefix}/installations`}>{t('installations.back')}</a>
-      <article>
-        <header>
-          <h1>{title}</h1>
-          <p>{description}</p>
-          <dl>
-            {location && (
+<SiteLayout
+  {lang}
+  {title}
+  {description}
+  altHref={`${localePath(alternateLang(lang))}/installations/${installation.id}`}
+>
+  <main>
+    <a href={`${prefix}/installations`}>{t("installations.back")}</a>
+    <article>
+      <header>
+        <h1>{title}</h1>
+        <p>{description}</p>
+        <dl>
+          {
+            location && (
               <>
-                <dt>{t('label.location')}</dt>
+                <dt>{t("label.location")}</dt>
                 <dd>{location}</dd>
               </>
-            )}
-            <dt>{t('label.date')}</dt>
-            <dd>
-              <time>{installation.data.date.toLocaleDateString(dateLocales[lang], { year: 'numeric', month: 'long' })}</time>
-            </dd>
-          </dl>
-          {installation.data.tags.length > 0 && (
+            )
+          }
+          <dt>{t("label.date")}</dt>
+          <dd>
+            <time>
+              {
+                installation.data.date.toLocaleDateString(dateLocales[lang], {
+                  year: "numeric",
+                  month: "long",
+                })
+              }
+            </time>
+          </dd>
+        </dl>
+        {
+          installation.data.tags.length > 0 && (
             <ul>
-              {installation.data.tags.map((tag: string) => <li>{tag}</li>)}
+              {installation.data.tags.map((tag: string) => (
+                <li>{tag}</li>
+              ))}
             </ul>
-          )}
-        </header>
-        {installation.data.image && <img src={installation.data.image} alt={title} />}
-        {lang === 'en' ? <Content /> : <div set:html={bodyDeHtml} />}
-      </article>
-    </main>
-  </body>
-</html>
+          )
+        }
+      </header>
+      {
+        installation.data.image && (
+          <img src={installation.data.image} alt={title} />
+        )
+      }
+      {lang === "en" ? <Content /> : <div set:html={bodyDeHtml} />}
+    </article>
+  </main>
+</SiteLayout>

@@ -1,56 +1,48 @@
 ---
-import { getCollection } from 'astro:content';
-import { useTranslations, localePath, alternateLang, languages, dateLocales, type Lang } from '../../../i18n/translations';
+import { getCollection } from "astro:content";
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import {
+  useTranslations,
+  localePath,
+  alternateLang,
+  dateLocales,
+  type Lang,
+} from "../../../i18n/translations";
 
 export function getStaticPaths() {
   return [
-    { params: { lang: undefined }, props: { lang: 'en' as const } },
-    { params: { lang: 'de' }, props: { lang: 'de' as const } },
+    { params: { lang: undefined }, props: { lang: "en" as const } },
+    { params: { lang: "de" }, props: { lang: "de" as const } },
   ];
 }
 
 const { lang } = Astro.props as { lang: Lang };
 const t = useTranslations(lang);
 const prefix = localePath(lang);
-const altLang = alternateLang(lang);
-const altPrefix = localePath(altLang);
 
-const works = (await getCollection('works', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const works = (await getCollection("works", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
 ---
 
-<html lang={lang}>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{t('works.title')}</title>
-  </head>
-  <body>
-    <nav>
-      <a href={`${prefix}/`}>{t('nav.home')}</a>
-      <a href={`${prefix}/works`}>{t('nav.works')}</a>
-      <a href={`${prefix}/installations`}>{t('nav.installations')}</a>
-      <a href={`${prefix}/bio`}>{t('nav.bio')}</a>
-      <a href={`${prefix}/contact`}>{t('nav.contact')}</a>
-      <a href={`${altPrefix}/works`} lang={altLang}>{languages[altLang]}</a>
-    </nav>
-
-    <main>
-      <h1>{t('works.title')}</h1>
-      <ul>
-        {works.map((work) => (
-          <li>
-            <a href={`${prefix}/works/${work.id}`}>
-              <strong>{lang === 'en' ? work.data.title_en : work.data.title_de}</strong>
-              {lang === 'en'
-                ? work.data.medium_en && <span> — {work.data.medium_en}</span>
-                : work.data.medium_de && <span> — {work.data.medium_de}</span>}
-            </a>
-            <p>{lang === 'en' ? work.data.description_en : work.data.description_de}</p>
-            <time>{work.data.date.toLocaleDateString(dateLocales[lang], { year: 'numeric', month: 'long' })}</time>
-          </li>
-        ))}
-      </ul>
-    </main>
-  </body>
-</html>
+<SiteLayout lang={lang} title={t("works.title")} altHref={`${localePath(alternateLang(lang))}/works`}>
+  <main>
+    <h1>{t("works.title")}</h1>
+    <ul>
+      {works.map((work) => (
+        <li>
+          <a href={`${prefix}/works/${work.id}`}>
+            <strong>{lang === "en" ? work.data.title_en : work.data.title_de}</strong>
+            {lang === "en"
+              ? work.data.medium_en && <span> — {work.data.medium_en}</span>
+              : work.data.medium_de && <span> — {work.data.medium_de}</span>}
+          </a>
+          <p>{lang === "en" ? work.data.description_en : work.data.description_de}</p>
+          <time>
+            {work.data.date.toLocaleDateString(dateLocales[lang], { year: "numeric", month: "long" })}
+          </time>
+        </li>
+      ))}
+    </ul>
+  </main>
+</SiteLayout>

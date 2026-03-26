@@ -1,40 +1,19 @@
 ---
-import { useTranslations, localePath, alternateLang, languages, type Lang } from '../../i18n/translations';
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { localePath, alternateLang, type Lang } from "../../i18n/translations";
 
 export function getStaticPaths() {
   return [
-    { params: { lang: undefined }, props: { lang: 'en' as const } },
-    { params: { lang: 'de' }, props: { lang: 'de' as const } },
+    { params: { lang: undefined }, props: { lang: "en" as const } },
+    { params: { lang: "de" }, props: { lang: "de" as const } },
   ];
 }
 
 const { lang } = Astro.props as { lang: Lang };
-const t = useTranslations(lang);
-const prefix = localePath(lang);
-const altLang = alternateLang(lang);
-const altPrefix = localePath(altLang);
 ---
 
-<html lang={lang}>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Pauli Schlipf</title>
-  </head>
-  <body>
-    <nav>
-      <a href={`${prefix}/`}>{t('nav.home')}</a>
-      <a href={`${prefix}/works`}>{t('nav.works')}</a>
-      <a href={`${prefix}/installations`}>{t('nav.installations')}</a>
-      <a href={`${prefix}/bio`}>{t('nav.bio')}</a>
-      <a href={`${prefix}/contact`}>{t('nav.contact')}</a>
-      <a href={`${altPrefix}/`} lang={altLang}>{languages[altLang]}</a>
-    </nav>
-    <main>
-      <h1>Pauli Schlipf</h1>
-    </main>
-  </body>
-</html>
+<SiteLayout lang={lang} title="Pauli Schlipf" altHref={`${localePath(alternateLang(lang))}/`}>
+  <main>
+    <h1>Pauli Schlipf</h1>
+  </main>
+</SiteLayout>

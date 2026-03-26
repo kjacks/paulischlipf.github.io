@@ -1,26 +1,44 @@
 ---
-import Navbar from "../components/Navbar.astro";
-const { title } = Astro.props;
+import type { Lang } from "../i18n/translations";
+import {
+  useTranslations,
+  localePath,
+  alternateLang,
+  languages,
+} from "../i18n/translations";
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  altHref: string;
+}
+
+const { lang, title, description, altHref } = Astro.props;
+const t = useTranslations(lang);
+const prefix = localePath(lang);
+const altLang = alternateLang(lang);
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Pauli Schlipf - {title}</title>
+    {description && <meta name="description" content={description} />}
+    <title>{title}</title>
   </head>
   <body>
-    <Navbar />
-    <h1>{title}</h1>
-    <article>
-      <slot />
-    </article>
-  </body><style>
-    h1 {
-      font-size: 2rem;
-    }
-  </style>
+    <nav>
+      <a href={`${prefix}/`}>{t("nav.home")}</a>
+      <a href={`${prefix}/works`}>{t("nav.works")}</a>
+      <a href={`${prefix}/installations`}>{t("nav.installations")}</a>
+      <a href={`${prefix}/bio`}>{t("nav.bio")}</a>
+      <a href={`${prefix}/contact`}>{t("nav.contact")}</a>
+      <a href={altHref} lang={altLang}>{languages[altLang]}</a>
+    </nav>
+    <slot />
+  </body>
 </html>

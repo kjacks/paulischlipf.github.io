@@ -97,11 +97,14 @@ content:
         label: Titel (Deutsch)
         type: string
         required: true
+      - name: body_en
+        label: Bio text (English)
+        type: rich-text
       - name: body_de
         label: Bio text (Deutsch)
         type: rich-text
       - name: image
-        label: Image / Bild
+        label: Image
         type: image
 
   - name: contact
@@ -120,6 +123,12 @@ content:
       - name: email
         label: Email
         type: string
+      - name: instagram
+        label: Instagram
+        type: string
+      - name: body_en
+        label: Contact text (English)
+        type: rich-text
       - name: body_de
         label: Contact text (Deutsch)
         type: rich-text
