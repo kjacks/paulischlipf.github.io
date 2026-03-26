@@ -8,7 +8,7 @@ content:
     path: src/content/works
     type: collection
     view:
-      fields: [title, date, medium, featured]
+      fields: [title, date, medium, size]
     fields:
       - name: title
         label: Title
@@ -16,40 +16,32 @@ content:
         required: true
       - name: description
         label: Description
-        type: string
-        required: true
+        type: rich-text
+        required: false
       - name: date
         label: Date
         type: date
-        required: true
+        required: false
       - name: medium
         label: Medium
+        type: string
+      - name: size
+        label: Size
         type: string
       - name: image
         label: Image
         type: image
-      - name: tags
-        label: Tags
-        type: string
-        list: true
-      - name: featured
-        label: Featured
-        type: boolean
-        default: false
       - name: draft
         label: Draft
         type: boolean
         default: false
-      - name: body
-        label: Content
-        type: rich-text
 
   - name: installations
     label: Installations
     path: src/content/installations
     type: collection
     view:
-      fields: [title, date, location, featured]
+      fields: [title, date, medium, size]
     fields:
       - name: title
         label: Title
@@ -57,30 +49,22 @@ content:
         required: true
       - name: description
         label: Description
-        type: string
-        required: true
+        type: rich-text
+        required: false
       - name: date
         label: Date
         type: date
-        required: true
-      - name: location
-        label: Location
+        required: false
+      - name: medium
+        label: Medium
+        type: string
+      - name: size
+        label: Size
         type: string
       - name: image
         label: Image
         type: image
-      - name: tags
-        label: Tags
-        type: string
-        list: true
-      - name: featured
-        label: Featured
-        type: boolean
-        default: false
       - name: draft
         label: Draft
         type: boolean
         default: false
-      - name: body
-        label: Content
-        type: rich-text
