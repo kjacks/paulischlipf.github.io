@@ -14,9 +14,11 @@ export function getStaticPaths() {
 const { lang } = Astro.props as { lang: Lang };
 const entries = await getCollection("contact");
 const entry = entries[0];
-const { Content } = await render(entry);
 const title = lang === "en" ? entry.data.title_en : entry.data.title_de;
-const bodyDeHtml = lang === "de" ? marked.parse(entry.data.body_de ?? "") : "";
+const bodyHtml =
+  lang === "en"
+    ? marked.parse(entry.data.body_en ?? "")
+    : marked.parse(entry.data.body_de ?? "");
 ---
 
 <SiteLayout
@@ -26,7 +28,7 @@ const bodyDeHtml = lang === "de" ? marked.parse(entry.data.body_de ?? "") : "";
 >
   <main>
     <h1>{title}</h1>
-    {lang === "en" ? <Content /> : <div set:html={bodyDeHtml} />}
+    <div set:html={bodyHtml} />
     {
       entry.data.email && (
         <p>

@@ -39,8 +39,6 @@ const description =
     : installation.data.description_de;
 const location =
   lang === "en" ? installation.data.location_en : installation.data.location_de;
-const bodyDeHtml =
-  lang === "de" ? marked.parse(installation.data.body_de ?? "") : "";
 ---
 
 <SiteLayout
@@ -91,7 +89,6 @@ const bodyDeHtml =
           <img src={installation.data.image} alt={title} />
         )
       }
-      {lang === "en" ? <Content /> : <div set:html={bodyDeHtml} />}
     </article>
   </main>
 </SiteLayout>

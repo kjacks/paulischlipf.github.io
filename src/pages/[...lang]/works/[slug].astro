@@ -79,7 +79,6 @@ const bodyDeHtml = lang === "de" ? marked.parse(work.data.body_de ?? "") : "";
         }
       </header>
       {work.data.image && <img src={work.data.image} alt={title} />}
-      {lang === "en" ? <Content /> : <div set:html={bodyDeHtml} />}
     </article>
   </main>
 </SiteLayout>
