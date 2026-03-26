@@ -1,1 +1,1 @@
-# pauli-portfolio
+# Pauli Schlipf
