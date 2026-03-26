@@ -1,0 +1,113 @@
+---
+import fs from "node:fs";
+import path from "node:path";
+
+interface Props {
+  /** Public URL directory, e.g. "/uploads/collage" */
+  dir: string;
+}
+
+const { dir } = Astro.props;
+
+const IMAGE_EXTS = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif"]);
+
+const fsDir = path.join(process.cwd(), "public", dir);
+const files = fs.existsSync(fsDir)
+  ? fs
+      .readdirSync(fsDir)
+      .filter((f) => IMAGE_EXTS.has(path.extname(f).toLowerCase()))
+  : [];
+
+const images = files.map((f) => ({ src: `${dir}/${f}`, alt: "" }));
+
+// Generate slots dynamically — tile positions with alternating sizes/rotations
+function makeSlots(count: number) {
+  const cols = 2;
+  const baseWidths = ["42%", "34%", "38%", "28%", "32%", "44%", "26%", "30%"];
+  const rotations = [
+    "-3deg",
+    "2.5deg",
+    "-1.5deg",
+    "4deg",
+    "2deg",
+    "-2.5deg",
+    "3.5deg",
+  ];
+  const predefined = [
+    { top: "5%", left: "8%", width: "42%", rotate: "-3deg" },
+    { top: "3%", left: "52%", width: "34%", rotate: "2.5deg" },
+    { top: "34%", left: "28%", width: "38%", rotate: "-1.5deg" },
+    { top: "28%", left: "62%", width: "28%", rotate: "4deg" },
+    { top: "58%", left: "5%", width: "32%", rotate: "2deg" },
+    { top: "55%", left: "40%", width: "44%", rotate: "-2.5deg" },
+    { top: "62%", left: "70%", width: "26%", rotate: "3.5deg" },
+    { top: "20%", left: "1%", width: "30%", rotate: "-4deg" },
+  ];
+  if (count <= predefined.length) return predefined.slice(0, count);
+  // For more than 8, generate extra slots continuing the pattern
+  const result = [...predefined];
+  for (let i = predefined.length; i < count; i++) {
+    const row = Math.floor(i / cols);
+    const col = i % cols;
+    result.push({
+      top: `${5 + row * 30}%`,
+      left: `${col === 0 ? 5 : 50}%`,
+      width: baseWidths[i % baseWidths.length],
+      rotate: rotations[i % rotations.length],
+    });
+  }
+  return result;
+}
+
+const slots = makeSlots(images.length);
+---
+
+<div class="collage">
+  {
+    images.map((img, i) => (
+      <div
+        class="collage__item"
+        style={`top:${slots[i].top};left:${slots[i].left};width:${slots[i].width};--rotate:${slots[i].rotate};z-index:${i + 1};`}
+      >
+        <img src={img.src} alt={img.alt ?? ""} />
+      </div>
+    ))
+  }
+</div>
+
+<style lang="scss">
+  .collage {
+    position: relative;
+    width: 100%;
+    max-width: 550px;
+    // On desktop: fixed 300px tall; on smaller screens scale proportionally
+    height: 300px;
+
+    @media (max-width: 580px) {
+      height: calc(100vw * (300 / 550));
+    }
+
+    overflow: hidden;
+
+    &__item {
+      position: absolute;
+      transform: rotate(var(--rotate));
+      transition:
+        transform 0.3s ease-in-out,
+        z-index 0.3s ease-in-out;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+
+      &:hover {
+        transform: rotate(0deg) scale(1.04);
+        z-index: 10 !important;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+    }
+  }
+</style>
