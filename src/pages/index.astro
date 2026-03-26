@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content";
+
+const bioEntries = await getCollection("bio");
+const bio = bioEntries[0];
+const contactEntries = await getCollection("contact");
+const contact = contactEntries[0];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pauli Schlipf</title>
+  </head>
+  <body>
+    <main>
+      {bio?.data.image && (
+        <div class="image-wrap">
+          <img src={bio.data.image} alt="Pauli Schlipf" />
+        </div>
+      )}
+      <div class="name-box">
+        <h1>Pauli Schlipf</h1>
+      </div>
+      <div class="links">
+        {contact?.data.instagram && (
+          <a href={contact.data.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+        )}
+        {contact?.data.email && (
+          <a href={`mailto:${contact.data.email}`}>{contact.data.email}</a>
+        )}
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: sans-serif; }
+  main { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding: 2rem; }
+  .image-wrap img { max-width: min(480px, 90vw); height: auto; display: block; }
+  .name-box { text-align: center; }
+  .name-box h1 { font-size: 2rem; font-weight: normal; letter-spacing: 0.05em; }
+  .links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+  .links a { text-decoration: none; color: inherit; border-bottom: 1px solid currentColor; }
+  .links a:hover { opacity: 0.6; }
+</style>
