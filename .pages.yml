@@ -3,9 +3,46 @@ media:
   output: /uploads
 
 content:
-  - name: works
-    label: Works
-    path: src/content/works
+  - name: paintings
+    label: Paintings
+    path: src/content/paintings
+    type: collection
+    view:
+      fields: [title_en, date, medium_en]
+    fields:
+      - name: title_en
+        label: Title (English)
+        type: string
+        required: true
+      - name: title_de
+        label: Titel (Deutsch)
+        type: string
+        required: true
+      - name: description_en
+        label: Description (English)
+        type: rich-text
+        required: false
+      - name: description_de
+        label: Beschreibung (Deutsch)
+        type: rich-text
+        required: false
+      - name: date
+        label: Date / Datum
+        type: date
+        required: false
+      - name: medium_en
+        label: Medium (English)
+        type: string
+      - name: medium_de
+        label: Medium (Deutsch)
+        type: string
+      - name: image
+        label: Image / Bild
+        type: image
+
+  - name: objects
+    label: Objects
+    path: src/content/objects
     type: collection
     view:
       fields: [title_en, date, medium_en]
