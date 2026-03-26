@@ -37,5 +37,25 @@ const installations = defineCollection({
   }),
 });
 
-export const collections = { works, installations };
+const bio = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/bio' }),
+  schema: z.object({
+    title_en: z.string(),
+    title_de: z.string(),
+    body_de: z.string().optional(),
+    image: z.string().optional(),
+  }),
+});
+
+const contact = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/contact' }),
+  schema: z.object({
+    title_en: z.string(),
+    title_de: z.string(),
+    email: z.string().optional(),
+    body_de: z.string().optional(),
+  }),
+});
+
+export const collections = { works, installations, bio, contact };
 

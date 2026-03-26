@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import { useTranslations, localePath, alternateLang, languages, dateLocales, type Lang } from '../../../i18n/translations';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined }, props: { lang: 'en' as const } },
+    { params: { lang: 'de' }, props: { lang: 'de' as const } },
+  ];
+}
+
+const { lang } = Astro.props as { lang: Lang };
+const t = useTranslations(lang);
+const prefix = localePath(lang);
+const altLang = alternateLang(lang);
+const altPrefix = localePath(altLang);
+
+const installations = (await getCollection('installations', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t('installations.title')}</title>
+  </head>
+  <body>
+    <nav>
+      <a href={`${prefix}/`}>{t('nav.home')}</a>
+      <a href={`${prefix}/works`}>{t('nav.works')}</a>
+      <a href={`${prefix}/installations`}>{t('nav.installations')}</a>
+      <a href={`${prefix}/bio`}>{t('nav.bio')}</a>
+      <a href={`${prefix}/contact`}>{t('nav.contact')}</a>
+      <a href={`${altPrefix}/installations`} lang={altLang}>{languages[altLang]}</a>
+    </nav>
+
+    <main>
+      <h1>{t('installations.title')}</h1>
+      <ul>
+        {installations.map((installation) => (
+          <li>
+            <a href={`${prefix}/installations/${installation.id}`}>
+              <strong>{lang === 'en' ? installation.data.title_en : installation.data.title_de}</strong>
+              {lang === 'en'
+                ? installation.data.location_en && <span> — {installation.data.location_en}</span>
+                : installation.data.location_de && <span> — {installation.data.location_de}</span>}
+            </a>
+            <p>{lang === 'en' ? installation.data.description_en : installation.data.description_de}</p>
+            <time>{installation.data.date.toLocaleDateString(dateLocales[lang], { year: 'numeric', month: 'long' })}</time>
+          </li>
+        ))}
+      </ul>
+    </main>
+  </body>
+</html>

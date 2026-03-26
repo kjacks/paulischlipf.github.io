@@ -84,3 +84,43 @@ content:
         label: Location (Deutsch)
         type: string
 
+  - name: bio
+    label: Bio
+    type: file
+    path: src/content/bio/index.md
+    fields:
+      - name: title_en
+        label: Title (English)
+        type: string
+        required: true
+      - name: title_de
+        label: Titel (Deutsch)
+        type: string
+        required: true
+      - name: body_de
+        label: Bio text (Deutsch)
+        type: rich-text
+      - name: image
+        label: Image / Bild
+        type: image
+
+  - name: contact
+    label: Contact / Kontakt
+    type: file
+    path: src/content/contact/index.md
+    fields:
+      - name: title_en
+        label: Title (English)
+        type: string
+        required: true
+      - name: title_de
+        label: Titel (Deutsch)
+        type: string
+        required: true
+      - name: email
+        label: Email
+        type: string
+      - name: body_de
+        label: Contact text (Deutsch)
+        type: rich-text
+

@@ -5,11 +5,18 @@ export const languages = {
 
 export type Lang = keyof typeof languages;
 
+export const dateLocales: Record<Lang, string> = {
+  en: 'en-AU',
+  de: 'de-DE',
+};
+
 const ui = {
   en: {
     'nav.home': 'Home',
     'nav.works': 'Works',
     'nav.installations': 'Installations',
+    'nav.bio': 'Bio',
+    'nav.contact': 'Contact',
     'works.title': 'Works',
     'works.back': '← Works',
     'installations.title': 'Installations',
@@ -22,6 +29,8 @@ const ui = {
     'nav.home': 'Startseite',
     'nav.works': 'Werke',
     'nav.installations': 'Installationen',
+    'nav.bio': 'Biografie',
+    'nav.contact': 'Kontakt',
     'works.title': 'Werke',
     'works.back': '← Werke',
     'installations.title': 'Installationen',
