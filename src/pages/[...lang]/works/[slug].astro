@@ -35,7 +35,12 @@ const medium = lang === "en" ? work.data.medium_en : work.data.medium_de;
 const bodyDeHtml = lang === "de" ? marked.parse(work.data.body_de ?? "") : "";
 ---
 
-<SiteLayout {lang} {title} {description} altHref={`${localePath(alternateLang(lang))}/works/${work.id}`}>
+<SiteLayout
+  {lang}
+  {title}
+  {description}
+  altHref={`${localePath(alternateLang(lang))}/works/${work.id}`}
+>
   <main>
     <a href={`${prefix}/works`}>{t("works.back")}</a>
     <article>
@@ -43,24 +48,35 @@ const bodyDeHtml = lang === "de" ? marked.parse(work.data.body_de ?? "") : "";
         <h1>{title}</h1>
         <p>{description}</p>
         <dl>
-          {medium && (
-            <>
-              <dt>{t("label.medium")}</dt>
-              <dd>{medium}</dd>
-            </>
-          )}
+          {
+            medium && (
+              <>
+                <dt>{t("label.medium")}</dt>
+                <dd>{medium}</dd>
+              </>
+            )
+          }
           <dt>{t("label.date")}</dt>
           <dd>
             <time>
-              {work.data.date.toLocaleDateString(dateLocales[lang], { year: "numeric", month: "long" })}
+              {
+                work.data.date.toLocaleDateString(dateLocales[lang], {
+                  year: "numeric",
+                  month: "long",
+                })
+              }
             </time>
           </dd>
         </dl>
-        {work.data.tags.length > 0 && (
-          <ul>
-            {work.data.tags.map((tag: string) => <li>{tag}</li>)}
-          </ul>
-        )}
+        {
+          work.data.tags.length > 0 && (
+            <ul>
+              {work.data.tags.map((tag: string) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          )
+        }
       </header>
       {work.data.image && <img src={work.data.image} alt={title} />}
       {lang === "en" ? <Content /> : <div set:html={bodyDeHtml} />}

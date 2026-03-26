@@ -25,24 +25,39 @@ const works = (await getCollection("works", ({ data }) => !data.draft)).sort(
 );
 ---
 
-<SiteLayout lang={lang} title={t("works.title")} altHref={`${localePath(alternateLang(lang))}/works`}>
+<SiteLayout
+  lang={lang}
+  title={t("works.title")}
+  altHref={`${localePath(alternateLang(lang))}/works`}
+>
   <main>
     <h1>{t("works.title")}</h1>
     <ul>
-      {works.map((work) => (
-        <li>
-          <a href={`${prefix}/works/${work.id}`}>
-            <strong>{lang === "en" ? work.data.title_en : work.data.title_de}</strong>
-            {lang === "en"
-              ? work.data.medium_en && <span> — {work.data.medium_en}</span>
-              : work.data.medium_de && <span> — {work.data.medium_de}</span>}
-          </a>
-          <p>{lang === "en" ? work.data.description_en : work.data.description_de}</p>
-          <time>
-            {work.data.date.toLocaleDateString(dateLocales[lang], { year: "numeric", month: "long" })}
-          </time>
-        </li>
-      ))}
+      {
+        works.map((work) => (
+          <li>
+            <a href={`${prefix}/works/${work.id}`}>
+              <strong>
+                {lang === "en" ? work.data.title_en : work.data.title_de}
+              </strong>
+              {lang === "en"
+                ? work.data.medium_en && <span> — {work.data.medium_en}</span>
+                : work.data.medium_de && <span> — {work.data.medium_de}</span>}
+            </a>
+            <p>
+              {lang === "en"
+                ? work.data.description_en
+                : work.data.description_de}
+            </p>
+            <time>
+              {work.data.date.toLocaleDateString(dateLocales[lang], {
+                year: "numeric",
+                month: "long",
+              })}
+            </time>
+          </li>
+        ))
+      }
     </ul>
   </main>
 </SiteLayout>

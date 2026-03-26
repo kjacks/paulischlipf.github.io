@@ -19,12 +19,20 @@ const title = lang === "en" ? entry.data.title_en : entry.data.title_de;
 const bodyDeHtml = lang === "de" ? marked.parse(entry.data.body_de ?? "") : "";
 ---
 
-<SiteLayout lang={lang} title={`${title} — Pauli Schlipf`} altHref={`${localePath(alternateLang(lang))}/contact`}>
+<SiteLayout
+  lang={lang}
+  title={`${title} — Pauli Schlipf`}
+  altHref={`${localePath(alternateLang(lang))}/contact`}
+>
   <main>
     <h1>{title}</h1>
     {lang === "en" ? <Content /> : <div set:html={bodyDeHtml} />}
-    {entry.data.email && (
-      <p><a href={`mailto:${entry.data.email}`}>{entry.data.email}</a></p>
-    )}
+    {
+      entry.data.email && (
+        <p>
+          <a href={`mailto:${entry.data.email}`}>{entry.data.email}</a>
+        </p>
+      )
+    }
   </main>
 </SiteLayout>

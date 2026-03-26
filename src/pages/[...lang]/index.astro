@@ -12,7 +12,11 @@ export function getStaticPaths() {
 const { lang } = Astro.props as { lang: Lang };
 ---
 
-<SiteLayout lang={lang} title="Pauli Schlipf" altHref={`${localePath(alternateLang(lang))}/`}>
+<SiteLayout
+  lang={lang}
+  title="Pauli Schlipf"
+  altHref={`${localePath(alternateLang(lang))}/`}
+>
   <main>
     <h1>Pauli Schlipf</h1>
   </main>
