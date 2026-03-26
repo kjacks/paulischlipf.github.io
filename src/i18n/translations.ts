@@ -6,7 +6,7 @@ export const languages = {
 export type Lang = keyof typeof languages;
 
 export const dateLocales: Record<Lang, string> = {
-  en: 'en-AU',
+  en: 'en-US',
   de: 'de-DE',
 };
 

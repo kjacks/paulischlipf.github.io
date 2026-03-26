@@ -79,7 +79,7 @@ content:
 
 
   - name: installations
-    label: Installations / Installationen
+    label: Installations
     path: src/content/installations
     type: collection
     view:

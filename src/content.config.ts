@@ -1,40 +1,30 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const works = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/works' }),
-  schema: z.object({
-    title_en: z.string(),
-    title_de: z.string(),
-    description_en: z.string(),
-    description_de: z.string(),
-    medium_en: z.string().optional(),
-    medium_de: z.string().optional(),
-    body_de: z.string().optional(),
-    date: z.coerce.date(),
-    image: z.string().optional(),
-    tags: z.array(z.string()).default([]),
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(false),
-  }),
+const commonFields = {
+  title_en: z.string(),
+  title_de: z.string(),
+  description_en: z.string(),
+  description_de: z.string(),
+  date: z.coerce.date(),
+  image: z.string().optional(),
+};
+
+const paintings = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/paintings' }),
+  schema: z.object({ ...commonFields }),
+});
+
+const objects = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/objects' }),
+  schema: z.object({ ...commonFields }),
 });
 
 const installations = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/installations' }),
-  schema: z.object({
-    title_en: z.string(),
-    title_de: z.string(),
-    description_en: z.string(),
-    description_de: z.string(),
+  schema: z.object({ ...commonFields,
     location_en: z.string().optional(),
-    location_de: z.string().optional(),
-    body_en: z.string().optional(),
-    body_de: z.string().optional(),
-    date: z.coerce.date(),
-    image: z.string().optional(),
-    tags: z.array(z.string()).default([]),
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(false),
+    location_de: z.string().optional()
   }),
 });
 
@@ -61,5 +51,5 @@ const contact = defineCollection({
   }),
 });
 
-export const collections = { works, installations, bio, contact };
+export const collections = { paintings, objects, installations, bio, contact };
 

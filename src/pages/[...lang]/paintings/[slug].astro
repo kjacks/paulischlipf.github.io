@@ -11,35 +11,37 @@ import {
 } from "../../../i18n/translations";
 
 export async function getStaticPaths() {
-  const works = await getCollection("works", ({ data }) => !data.draft);
+  const paintings = await getCollection("paintings", ({ data }) => !data.draft);
   const locales = [
     { lang: "en" as const, langParam: undefined },
     { lang: "de" as const, langParam: "de" },
   ];
   return locales.flatMap(({ lang, langParam }) =>
-    works.map((work) => ({
-      params: { lang: langParam, slug: work.id },
-      props: { work, lang },
+    paintings.map((painting) => ({
+      params: { lang: langParam, slug: painting.id },
+      props: { painting, lang },
     })),
   );
 }
 
-const { work, lang } = Astro.props as { work: any; lang: Lang };
+const { painting, lang } = Astro.props as { painting: any; lang: Lang };
 const t = useTranslations(lang);
 const prefix = localePath(lang);
-const { Content } = await render(work);
-const title = lang === "en" ? work.data.title_en : work.data.title_de;
+const { Content } = await render(painting);
+const title = lang === "en" ? painting.data.title_en : painting.data.title_de;
 const description =
-  lang === "en" ? work.data.description_en : work.data.description_de;
-const medium = lang === "en" ? work.data.medium_en : work.data.medium_de;
-const bodyDeHtml = lang === "de" ? marked.parse(work.data.body_de ?? "") : "";
+  lang === "en" ? painting.data.description_en : painting.data.description_de;
+const medium =
+  lang === "en" ? painting.data.medium_en : painting.data.medium_de;
+const bodyDeHtml =
+  lang === "de" ? marked.parse(painting.data.body_de ?? "") : "";
 ---
 
 <SiteLayout
   {lang}
   {title}
   {description}
-  altHref={`${localePath(alternateLang(lang))}/works/${work.id}`}
+  altHref={`${localePath(alternateLang(lang))}/paintings/${painting.id}`}
 >
   <main>
     <article>
@@ -59,7 +61,7 @@ const bodyDeHtml = lang === "de" ? marked.parse(work.data.body_de ?? "") : "";
           <dd>
             <time>
               {
-                work.data.date.toLocaleDateString(dateLocales[lang], {
+                painting.data.date.toLocaleDateString(dateLocales[lang], {
                   year: "numeric",
                   month: "long",
                 })
@@ -68,16 +70,16 @@ const bodyDeHtml = lang === "de" ? marked.parse(work.data.body_de ?? "") : "";
           </dd>
         </dl>
         {
-          work.data.tags.length > 0 && (
+          painting.data.tags.length > 0 && (
             <ul>
-              {work.data.tags.map((tag: string) => (
+              {painting.data.tags.map((tag: string) => (
                 <li>{tag}</li>
               ))}
             </ul>
           )
         }
       </header>
-      {work.data.image && <img src={work.data.image} alt={title} />}
+      {painting.data.image && <img src={painting.data.image} alt={title} />}
     </article>
   </main>
 </SiteLayout>

@@ -12,8 +12,17 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/svelte": "^8.0.4",
     "astro": "^6.0.8",
     "astro-navbar": "^2.4.0",
-    "marked": "^17.0.5"
+    "flowbite": "^4.0.1",
+    "flowbite-svelte": "^1.32.0",
+    "marked": "^17.0.5",
+    "svelte": "^5.55.0",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "sass": "^1.98.0"
   }
 }
