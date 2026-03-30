@@ -104,8 +104,9 @@
               width: {itemSize}px;
               height: {itemSize}px;
               transform: rotateY({angle}deg) translateZ({radius}px);
-              opacity: {isFront ? 1 : 0.55};
+              opacity: {isFront ? 1 : 0.45};
               transition: opacity 0.6s ease;
+              background: {isFront ? 'rgba(255, 255, 255, 1)' : 'transparent'};
             "
             onclick={() => open(item, i)}
           >
