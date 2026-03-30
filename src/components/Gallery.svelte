@@ -8,6 +8,12 @@
   let visibleCount = $state(0);
 
   onMount(() => {
+    const hash = location.hash.slice(1);
+    if (hash) {
+      const match = items.find((item) => item.id === hash);
+      if (match) selected = match;
+    }
+
     let i = 0;
     const interval = setInterval(() => {
       i++;
@@ -35,7 +41,7 @@
     <button
       type="button"
       id={item.id}
-      class="group relative block overflow-hidden aspect-square cursor-pointer w-full"
+      class="group relative block overflow-hidden aspect-square cursor-pointer w-full focus:outline-none"
       onclick={() => {
         open(item);
       }}

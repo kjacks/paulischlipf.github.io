@@ -32,7 +32,7 @@
   $inspect(activeUrl);
 </script>
 
-<Navbar fluid navContainerClass="max-w-[1400px] mx-auto w-full">
+<Navbar fluid navContainerClass="nav-inner">
   <NavBrand href="/">
     <span
       class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
@@ -53,6 +53,3 @@
     <NavLi href={altHref} lang={altLang}>{languages[altLang]}</NavLi>
   </NavUl>
 </Navbar>
-
-<style>
-</style>
