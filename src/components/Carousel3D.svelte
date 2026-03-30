@@ -4,20 +4,31 @@
   let { items } = $props();
 
   let selected = $state(null);
+  let containerWidth = $state(0);
+
   // `rotation` accumulates continuously — never wraps — so CSS always
   // takes the shortest path and never jumps.
   let rotation = $state(0);
+  const count = items.length;
+  const angleStep = 360 / count;
   const activeIndex = $derived(((rotation % count) + count) % count);
   const activeItem = $derived(items[activeIndex]);
 
-  const ITEM_SIZE = 180;
-  const count = items.length;
-  const angleStep = 360 / count;
-  // Radius of the circle — larger with more items so they don't overlap
-  const radius = Math.max(250, (ITEM_SIZE * count) / (2 * Math.PI) + 40);
+  // Scale item size and radius to the container, capped for desktop
+  const itemSize = $derived(
+    Math.min(210, Math.floor((containerWidth || 320) * 0.28)),
+  );
+  const radius = $derived(
+    Math.max(
+      itemSize * 1.2,
+      (itemSize * count) / (2 * Math.PI) + 20,
+      // also keep the ring within the viewport
+      Math.min(250, (containerWidth || 320) / 2 - itemSize / 2 - 16),
+    ),
+  );
+  const sceneHeight = $derived(radius);
 
   function rotateTo(index) {
-    // Pick the shortest delta from current position to target index
     const current = ((rotation % count) + count) % count;
     let delta = index - current;
     if (delta > count / 2) delta -= count;
@@ -44,7 +55,10 @@
 
 <svelte:window on:keydown={onKeydown} />
 
-<div class="w-full flex flex-col items-center gap-8 py-12">
+<div
+  class="w-full flex flex-col items-center gap-6 py-8"
+  bind:clientWidth={containerWidth}
+>
   <!-- Prev / Next arrows -->
   <div class="flex gap-6">
     <button
@@ -60,14 +74,11 @@
       onclick={() => (rotation += 1)}>&rarr;</button
     >
   </div>
+
   <!-- 3D scene -->
   <div
-    class="relative"
-    style="
-      width: 100%;
-      height: {radius}px;
-      perspective: 1200px;
-    "
+    class="relative w-full overflow-hidden"
+    style="height: {sceneHeight}px; perspective: {radius * 5}px;"
   >
     <div
       class="absolute inset-0 flex items-center justify-center"
@@ -76,8 +87,8 @@
       <div
         class="relative"
         style="
-          width: {ITEM_SIZE}px;
-          height: {ITEM_SIZE}px;
+          width: {itemSize}px;
+          height: {itemSize}px;
           transform-style: preserve-3d;
           transform: rotateY({-rotation * angleStep}deg);
           transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -90,10 +101,10 @@
             type="button"
             class="absolute inset-0 cursor-pointer bg-transparent border-none p-0"
             style="
-              width: {ITEM_SIZE}px;
-              height: {ITEM_SIZE}px;
+              width: {itemSize}px;
+              height: {itemSize}px;
               transform: rotateY({angle}deg) translateZ({radius}px);
-              opacity: {isFront ? 1 : 0.65};
+              opacity: {isFront ? 1 : 0.55};
               transition: opacity 0.6s ease;
             "
             onclick={() => open(item, i)}
