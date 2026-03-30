@@ -28,7 +28,7 @@ const bodyHtml =
   altHref={`${localePath(alternateLang(lang))}/bio`}
 >
   <main>
-    <div class="md:flex gap-8 my-8">
+    <div class="flex flex-col sm:flex-row gap-10 my-8">
       {
         entry.data.image && (
           <div class="flex-1">
@@ -49,3 +49,10 @@ const bodyHtml =
     </div>
   </main>
 </SiteLayout>
+
+<style>
+  :global(p) {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+</style>

@@ -32,7 +32,7 @@
   $inspect(activeUrl);
 </script>
 
-<Navbar>
+<Navbar fluid navContainerClass="max-w-[1400px] mx-auto w-full">
   <NavBrand href="/">
     <span
       class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
@@ -42,6 +42,7 @@
   <NavHamburger />
   <NavUl
     {activeUrl}
+    // class="!max-w-none"
     classes={{ active: activeClass, nonActive: nonActiveClass }}
   >
     <NavLi href={`${prefix}/paintings`}>{t("nav.paintings")}</NavLi>
