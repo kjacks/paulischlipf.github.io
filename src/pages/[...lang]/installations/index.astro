@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
 import SiteLayout from "../../../layouts/SiteLayout.astro";
 import {
   useTranslations,
@@ -8,7 +9,7 @@ import {
   getLocalizedObject,
   dateLocales,
 } from "../../../i18n/translations";
-import { Image } from "astro:assets";
+import InstallationList from "../../../components/InstallationList.svelte";
 
 export function getStaticPaths() {
   return [
@@ -21,9 +22,30 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const prefix = localePath(lang);
 
-const installations = (await getCollection("installations"))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .map((item) => ({ ...item, data: getLocalizedObject(item.data, lang) }));
+const installations = await Promise.all(
+  (await getCollection("installations"))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .map(async (rawItem) => {
+      const data = getLocalizedObject(rawItem.data, lang);
+      if (data.images) {
+        data.images = await Promise.all(
+          data.images.map(async (img) => {
+            const result = await getImage({
+              src: img,
+              format: "webp",
+              width: 800,
+            });
+            return {
+              src: result.src,
+              width: result.attributes.width,
+              height: result.attributes.height,
+            };
+          }),
+        );
+      }
+      return { ...rawItem, data };
+    }),
+);
 ---
 
 <SiteLayout
@@ -32,36 +54,5 @@ const installations = (await getCollection("installations"))
   altHref={`${localePath(alternateLang(lang))}/installations`}
   class="max-w-none"
 >
-  {
-    installations.map((item, i) => (
-      <div
-        class={`my-16 p-16 ${i % 2 === 0 ? "bg-white" : "bg-gray-200 text-right"}`}
-      >
-        <div class="flex gap-4">
-          {item.data.images?.map((img) => (
-            <Image
-              src={img}
-              alt={item.data.title}
-              width={200}
-              height={200}
-              class="w-full h-auto object-cover rounded mb-4"
-            />
-          ))}
-        </div>
-
-        <h2 class="text-2xl font-bold mb-4">{item.data.title}</h2>
-        <p class="text-sm text-gray-500 mt-1">
-          {item.data.date.toLocaleDateString("de-DE", {
-            year: "numeric",
-          })}
-        </p>
-        {item.data.location && (
-          <p class="mt-4 text-gray-700">{item.data.location}</p>
-        )}
-        {item.data.description && (
-          <p class="mt-4 text-gray-700">{item.data.description}</p>
-        )}
-      </div>
-    ))
-  }
+  <InstallationList items={installations} client:load />
 </SiteLayout>

@@ -1,6 +1,6 @@
 media:
-  input: public/uploads
-  output: /uploads
+  input: src/assets
+  output: /assets
 
 content:
   - name: paintings
@@ -105,21 +105,17 @@ content:
         label: Date / Datum
         type: date
         required: false
-      - name: medium_en
-        label: Medium (English)
-        type: string
-      - name: medium_de
-        label: Medium (Deutsch)
-        type: string
-      - name: image
-        label: Image / Bild
-        type: image
       - name: location_en
         label: Location (English)
         type: string
       - name: location_de
         label: Location (Deutsch)
         type: string
+      - name: images
+        label: Images / Bilder
+        type: image
+        list: true
+     
 
   - name: bio
     label: Bio
