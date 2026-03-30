@@ -6,7 +6,6 @@
   let selected = $state(null);
 
   function open(item) {
-    console.log("Opening item", item);
     selected = item;
     location.hash = item.id;
   }
@@ -26,7 +25,6 @@
       id={item.id}
       class="group relative block overflow-hidden aspect-square cursor-pointer w-full"
       onclick={() => {
-        console.log("clicking item", item);
         open(item);
       }}
     >
@@ -45,6 +43,10 @@
         <p class="font-semibold text-sm leading-tight">
           {item.data.title}
         </p>
+        {#if item.data.dimensions}
+          <p class="text-xs text-gray-300 mt-1">{item.data.dimensions}</p>
+        {/if}
+
         <p class="text-xs text-gray-300 mt-1">
           {item.data.date.toLocaleDateString("de-DE", {
             year: "numeric",

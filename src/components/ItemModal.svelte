@@ -49,6 +49,12 @@
           year: "numeric",
         })}
       </p>
+      {#if item.data.dimensions}
+        <p class="mt-4 text-gray-700">{item.data.dimensions}</p>
+      {/if}
+      {#if item.data.medium}
+        <p class="mt-4 text-gray-700">{item.data.medium}</p>
+      {/if}
       {#if item.data.description}
         <p class="mt-4 text-gray-700">{item.data.description}</p>
       {/if}

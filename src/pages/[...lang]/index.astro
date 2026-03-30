@@ -1,6 +1,5 @@
 ---
-import SiteLayout from "../../layouts/SiteLayout.astro";
-import { localePath, alternateLang, type Lang } from "../../i18n/translations";
+import { localePath, type Lang } from "../../i18n/translations";
 
 export function getStaticPaths() {
   return [
@@ -10,14 +9,6 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.props as { lang: Lang };
----
 
-<SiteLayout
-  lang={lang}
-  title="Pauli Schlipf"
-  altHref={`${localePath(alternateLang(lang))}/`}
->
-  <main>
-    <h1>Pauli Schlipf</h1>
-  </main>
-</SiteLayout>
+return Astro.redirect(`${localePath(lang)}/paintings`, 301);
+---
