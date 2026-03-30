@@ -1,10 +1,21 @@
 <script>
+  import { onMount } from "svelte";
   import ItemModal from "./ItemModal.svelte";
 
   let { items } = $props();
 
   let selected = $state(null);
-  let loaded = $state(items.map(() => false));
+  let visibleCount = $state(0);
+
+  onMount(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      visibleCount = i;
+      if (i >= items.length) clearInterval(interval);
+    }, 80);
+    return () => clearInterval(interval);
+  });
 
   function open(item) {
     selected = item;
@@ -18,7 +29,7 @@
 </script>
 
 <div
-  class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 justify-between"
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-between"
 >
   {#each items as item, i}
     <button
@@ -37,11 +48,9 @@
           alt={item.data.title}
           loading="lazy"
           decoding="async"
-          style="opacity: {loaded[i]
-            ? 1
-            : 0}; transition: opacity 500ms ease {i * 80}ms;"
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          onload={() => (loaded[i] = true)}
+          style="opacity: {i < visibleCount ? 1 : 0}; transition: opacity 500ms ease, scale 300ms ease-in-out;"
+          class="w-full h-full object-cover group-hover:scale-105"
+          />
         />
       {:else}
         <div class="w-full h-full bg-gray-200"></div>
