@@ -42,9 +42,9 @@
     >
       {#if item.data.image}
         <img
-          src={item.data.image.src}
-          width={item.data.image.width}
-          height={item.data.image.height}
+          src={item.data.image.thumbnail.src}
+          width={item.data.image.thumbnail.width}
+          height={item.data.image.thumbnail.height}
           alt={item.data.title}
           loading="lazy"
           decoding="async"

@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import ItemDetails from "./ItemDetails.svelte";
 
   let { items } = $props();
@@ -51,6 +52,14 @@
     if (e.key === "ArrowLeft") rotation -= 1;
     if (e.key === "ArrowRight") rotation += 1;
   }
+
+  onMount(() => {
+    const hash = location.hash.slice(1);
+    if (hash) {
+      const index = items.findIndex((item) => item.id === hash);
+      if (index !== -1) rotation = index;
+    }
+  });
 </script>
 
 <svelte:window on:keydown={onKeydown} />
@@ -112,9 +121,9 @@
           >
             <!-- {#if item.data.image} -->
             <img
-              src={item.data.image.src}
-              width={item.data.image.width}
-              height={item.data.image.height}
+              src={item.data.image.thumbnail.src}
+              width={item.data.image.thumbnail.width}
+              height={item.data.image.thumbnail.height}
               alt={item.data.title}
               loading="lazy"
               decoding="async"

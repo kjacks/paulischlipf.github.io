@@ -35,9 +35,9 @@
     {#if item.data.image}
       <div class="flex-1">
         <img
-          src={item.data.image.src}
-          width={item.data.image.width}
-          height={item.data.image.height}
+          src={item.data.image.full.src}
+          width={item.data.image.full.width}
+          height={item.data.image.full.height}
           alt={item.data.title}
           decoding="async"
           class="w-full object-contain max-h-[60vh]"
