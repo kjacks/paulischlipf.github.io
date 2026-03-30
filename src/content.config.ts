@@ -8,6 +8,9 @@ const commonFields = {
   description_de: z.string(),
   date: z.coerce.date(),
   image: z.string().optional(),
+  medium_en: z.string().optional(),
+  medium_de: z.string().optional(),
+  dimensions: z.string().optional(),
 };
 
 const paintings = defineCollection({

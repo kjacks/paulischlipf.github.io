@@ -5,6 +5,7 @@ import {
   useTranslations,
   localePath,
   alternateLang,
+  getLocalizedObject,
   dateLocales,
 } from "../../../i18n/translations";
 import Gallery from "../../../components/Gallery.svelte";
@@ -20,9 +21,9 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const prefix = localePath(lang);
 
-const paintings = (await getCollection("paintings")).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-);
+const paintings = (await getCollection("paintings"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .map((item) => ({ ...item, data: getLocalizedObject(item.data, lang) }));
 ---
 
 <SiteLayout
@@ -31,7 +32,6 @@ const paintings = (await getCollection("paintings")).sort(
   altHref={`${localePath(alternateLang(lang))}/paintings`}
 >
   <main>
-    <h1>{t("paintings.title")}</h1>
-    <Gallery items={paintings} {lang} />
+    <Gallery items={paintings} client:load />
   </main>
 </SiteLayout>

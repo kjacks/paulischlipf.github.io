@@ -56,3 +56,21 @@ export function localePath(lang: Lang): string {
 export function alternateLang(lang: Lang): Lang {
   return lang === 'en' ? 'de' : 'en';
 }
+
+export function getLocalizedObject(obj: Record<string, any>, lang: Lang): any {
+  const localizedObj: Record<string, any> = {};
+  for (const key in obj) {
+    if (key.endsWith(`_${lang}`)) {
+      const baseKey = key.slice(0, -3); // Remove _en or _de
+      localizedObj[baseKey] = obj[key];
+    } else if (!key.endsWith('_en') && !key.endsWith('_de')) {
+      localizedObj[key] = obj[key]; // Include non-localized keys as is
+    }
+  }
+  return localizedObj;
+}
+
+export function getLocalizedValue(obj: Record<string, any>, key: string, lang: Lang): any {
+  const localizedKey = `${key}_${lang}`;
+  return localizedKey in obj ? obj[localizedKey] : obj[key];
+}
