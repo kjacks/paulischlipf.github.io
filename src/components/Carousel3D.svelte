@@ -77,7 +77,7 @@
 
   <!-- 3D scene -->
   <div
-    class="relative w-full overflow-hidden"
+    class="relative w-full overflow-hidden min-h-[250px]"
     style="height: {sceneHeight}px; perspective: {radius * 5}px;"
   >
     <div
@@ -110,19 +110,19 @@
             "
             onclick={() => open(item, i)}
           >
-            {#if item.data.image}
-              <img
-                src={item.data.image.src}
-                width={item.data.image.width}
-                height={item.data.image.height}
-                alt={item.data.title}
-                loading="lazy"
-                decoding="async"
-                class="w-full h-full object-contain block"
-              />
-            {:else}
+            <!-- {#if item.data.image} -->
+            <img
+              src={item.data.image.src}
+              width={item.data.image.width}
+              height={item.data.image.height}
+              alt={item.data.title}
+              loading="lazy"
+              decoding="async"
+              class="w-full h-full object-contain block"
+            />
+            <!-- {:else}
               <div class="w-full h-full bg-gray-200 rounded"></div>
-            {/if}
+            {/if} -->
           </button>
         {/each}
       </div>

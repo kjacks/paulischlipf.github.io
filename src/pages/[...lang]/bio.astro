@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import { marked } from "marked";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { localePath, alternateLang, type Lang } from "../../i18n/translations";
+import { Image } from "astro:assets";
 
 export function getStaticPaths() {
   return [
@@ -27,16 +28,22 @@ const bodyHtml =
   altHref={`${localePath(alternateLang(lang))}/bio`}
 >
   <main>
-    <div class="flex gap-8 my-8">
+    <div class="md:flex gap-8 my-8">
       {
         entry.data.image && (
           <div class="flex-1">
-            <img src={entry.data.image} alt={title} />
+            <Image
+              src={entry.data.image}
+              alt={title}
+              width={400}
+              height={400}
+              class="w-full h-auto object-cover rounded"
+            />
           </div>
         )
       }
       <div class="flex-1">
-        <h1>{title}</h1>
+        <h1 class="text-2xl font-bold">{title}</h1>
         <div class="my-8" set:html={bodyHtml} />
       </div>
     </div>

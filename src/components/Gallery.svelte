@@ -4,6 +4,7 @@
   let { items } = $props();
 
   let selected = $state(null);
+  let loaded = $state(items.map(() => false));
 
   function open(item) {
     selected = item;
@@ -19,7 +20,7 @@
 <div
   class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 justify-between"
 >
-  {#each items as item}
+  {#each items as item, i}
     <button
       type="button"
       id={item.id}
@@ -36,7 +37,11 @@
           alt={item.data.title}
           loading="lazy"
           decoding="async"
+          style="opacity: {loaded[i]
+            ? 1
+            : 0}; transition: opacity 500ms ease {i * 80}ms;"
           class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          onload={() => (loaded[i] = true)}
         />
       {:else}
         <div class="w-full h-full bg-gray-200"></div>

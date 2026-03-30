@@ -28,11 +28,19 @@ const objects = await Promise.all(
     .map(async (rawItem) => {
       const data = getLocalizedObject(rawItem.data, lang);
       if (data.image) {
-        const result = await getImage({ src: data.image, format: "webp", width: 1200 });
-        (data as any).image = { src: result.src, width: result.attributes.width, height: result.attributes.height };
+        const result = await getImage({
+          src: data.image,
+          format: "webp",
+          width: 1200,
+        });
+        (data as any).image = {
+          src: result.src,
+          width: result.attributes.width,
+          height: result.attributes.height,
+        };
       }
       return { ...rawItem, data };
-    })
+    }),
 );
 ---
 

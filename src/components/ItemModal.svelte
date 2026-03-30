@@ -33,16 +33,19 @@
     >
 
     {#if item.data.image}
-      <img
-        src={item.data.image.src}
-        width={item.data.image.width}
-        height={item.data.image.height}
-        alt={item.data.title}
-        decoding="async"
-        class="w-full object-contain max-h-[60vh]"
-      />
+      <div class="flex-1">
+        <img
+          src={item.data.image.src}
+          width={item.data.image.width}
+          height={item.data.image.height}
+          alt={item.data.title}
+          decoding="async"
+          class="w-full object-contain max-h-[60vh]"
+        />
+      </div>
     {/if}
-
-    <ItemDetails {item} />
+    <div class="flex-1">
+      <ItemDetails {item} />
+    </div>
   </div>
 </div>

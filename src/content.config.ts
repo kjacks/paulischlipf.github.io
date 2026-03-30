@@ -35,8 +35,8 @@ const objects = defineCollection({
 
 const installations = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/installations' }),
-  schema: z.object({ ...baseCommonFields,
-    images: z.array(z.string()).optional(),
+  schema: ({ image }) => z.object({ ...baseCommonFields,
+    images: z.array(image()).optional(),
     location_en: z.string().optional(),
     location_de: z.string().optional()
   }),

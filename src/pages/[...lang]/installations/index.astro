@@ -8,7 +8,7 @@ import {
   getLocalizedObject,
   dateLocales,
 } from "../../../i18n/translations";
-import FloatingGallery from "../../../components/FloatingGallery.svelte";
+import { Image } from "astro:assets";
 
 export function getStaticPaths() {
   return [
@@ -30,10 +30,25 @@ const installations = (await getCollection("installations"))
   lang={lang}
   title={t("installations.title")}
   altHref={`${localePath(alternateLang(lang))}/installations`}
+  class="max-w-none"
 >
   {
-    installations.map((item) => (
-      <div>
+    installations.map((item, i) => (
+      <div
+        class={`my-16 p-16 ${i % 2 === 0 ? "bg-white" : "bg-gray-200 text-right"}`}
+      >
+        <div class="flex gap-4">
+          {item.data.images?.map((img) => (
+            <Image
+              src={img}
+              alt={item.data.title}
+              width={200}
+              height={200}
+              class="w-full h-auto object-cover rounded mb-4"
+            />
+          ))}
+        </div>
+
         <h2 class="text-2xl font-bold mb-4">{item.data.title}</h2>
         <p class="text-sm text-gray-500 mt-1">
           {item.data.date.toLocaleDateString("de-DE", {
@@ -41,10 +56,10 @@ const installations = (await getCollection("installations"))
           })}
         </p>
         {item.data.location && (
-          <p class="mt-4 text-gray-700 max-w-2xl">{item.data.location}</p>
+          <p class="mt-4 text-gray-700">{item.data.location}</p>
         )}
         {item.data.description && (
-          <p class="mt-4 text-gray-700 max-w-2xl">{item.data.description}</p>
+          <p class="mt-4 text-gray-700">{item.data.description}</p>
         )}
       </div>
     ))
