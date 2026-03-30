@@ -1,6 +1,6 @@
 ---
-title_en: Bio
-title_de: Biografie
+title_en: Pauli Schlipf
+title_de: Pauli Schlipf
 body_en: >-
   Pauli Schlipf studies fine arts at Kunsthochschule Weissensee Berlin. They
   work in different fields such as painting, photography and multimedia
@@ -11,5 +11,5 @@ body_en: >-
   Their works open up space in which the complexity of sudden encounters remains
   unfinished and wholesome and in this way resist heteronormative definiteness.
 body_de: Pauli Schlipf ist ein kunstler...
-image: /uploads/625049434_18110352256647476_8197137787110278149_n.webp
+image: "../../assets/625049434_18110352256647476_8197137787110278149_n.webp"
 ---

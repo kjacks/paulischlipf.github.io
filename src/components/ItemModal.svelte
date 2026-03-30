@@ -34,8 +34,11 @@
 
     {#if item.data.image}
       <img
-        src={item.data.image}
+        src={item.data.image.src}
+        width={item.data.image.width}
+        height={item.data.image.height}
         alt={item.data.title}
+        decoding="async"
         class="w-full object-contain max-h-[60vh]"
       />
     {/if}

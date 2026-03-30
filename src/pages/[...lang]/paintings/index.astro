@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
 import SiteLayout from "../../../layouts/SiteLayout.astro";
 import {
   useTranslations,
@@ -21,9 +22,18 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const prefix = localePath(lang);
 
-const paintings = (await getCollection("paintings"))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .map((item) => ({ ...item, data: getLocalizedObject(item.data, lang) }));
+const paintings = await Promise.all(
+  (await getCollection("paintings"))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .map(async (rawItem) => {
+      const data = getLocalizedObject(rawItem.data, lang);
+      if (data.image) {
+        const result = await getImage({ src: data.image, format: "webp", width: 1200 });
+        (data as any).image = { src: result.src, width: result.attributes.width, height: result.attributes.height };
+      }
+      return { ...rawItem, data };
+    })
+);
 ---
 
 <SiteLayout

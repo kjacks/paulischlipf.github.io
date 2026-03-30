@@ -112,8 +112,12 @@
           >
             {#if item.data.image}
               <img
-                src={item.data.image}
+                src={item.data.image.src}
+                width={item.data.image.width}
+                height={item.data.image.height}
                 alt={item.data.title}
+                loading="lazy"
+                decoding="async"
                 class="w-full h-full object-contain block"
               />
             {:else}

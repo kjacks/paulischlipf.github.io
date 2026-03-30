@@ -31,7 +31,22 @@ const installations = (await getCollection("installations"))
   title={t("installations.title")}
   altHref={`${localePath(alternateLang(lang))}/installations`}
 >
-  <main>
-    <FloatingGallery items={installations} client:load />
-  </main>
+  {
+    installations.map((item) => (
+      <div>
+        <h2 class="text-2xl font-bold mb-4">{item.data.title}</h2>
+        <p class="text-sm text-gray-500 mt-1">
+          {item.data.date.toLocaleDateString("de-DE", {
+            year: "numeric",
+          })}
+        </p>
+        {item.data.location && (
+          <p class="mt-4 text-gray-700 max-w-2xl">{item.data.location}</p>
+        )}
+        {item.data.description && (
+          <p class="mt-4 text-gray-700 max-w-2xl">{item.data.description}</p>
+        )}
+      </div>
+    ))
+  }
 </SiteLayout>

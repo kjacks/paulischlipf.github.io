@@ -27,8 +27,18 @@ const bodyHtml =
   altHref={`${localePath(alternateLang(lang))}/bio`}
 >
   <main>
-    <h1>{title}</h1>
-    {entry.data.image && <img src={entry.data.image} alt={title} />}
-    <div set:html={bodyHtml} />
+    <div class="flex gap-8 my-8">
+      {
+        entry.data.image && (
+          <div class="flex-1">
+            <img src={entry.data.image} alt={title} />
+          </div>
+        )
+      }
+      <div class="flex-1">
+        <h1>{title}</h1>
+        <div class="my-8" set:html={bodyHtml} />
+      </div>
+    </div>
   </main>
 </SiteLayout>
