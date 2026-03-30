@@ -4,7 +4,10 @@
   let { items } = $props();
 
   let selected = $state(null);
-  let activeIndex = $state(0);
+  // `rotation` accumulates continuously — never wraps — so CSS always
+  // takes the shortest path and never jumps.
+  let rotation = $state(0);
+  const activeIndex = $derived(((rotation % count) + count) % count);
 
   const ITEM_SIZE = 180;
   const count = items.length;
@@ -13,7 +16,12 @@
   const radius = Math.max(250, (ITEM_SIZE * count) / (2 * Math.PI) + 40);
 
   function rotateTo(index) {
-    activeIndex = index;
+    // Pick the shortest delta from current position to target index
+    const current = ((rotation % count) + count) % count;
+    let delta = index - current;
+    if (delta > count / 2) delta -= count;
+    if (delta < -count / 2) delta += count;
+    rotation += delta;
   }
 
   function open(item, index) {
@@ -28,8 +36,8 @@
   }
 
   function onKeydown(e) {
-    if (e.key === "ArrowLeft") activeIndex = (activeIndex - 1 + count) % count;
-    if (e.key === "ArrowRight") activeIndex = (activeIndex + 1) % count;
+    if (e.key === "ArrowLeft") rotation -= 1;
+    if (e.key === "ArrowRight") rotation += 1;
   }
 </script>
 
@@ -42,14 +50,13 @@
       type="button"
       class="text-2xl text-gray-500 hover:text-black transition-colors cursor-pointer bg-transparent border-none"
       aria-label="Previous"
-      onclick={() => (activeIndex = (activeIndex - 1 + count) % count)}
-      >&larr;</button
+      onclick={() => (rotation -= 1)}>&larr;</button
     >
     <button
       type="button"
       class="text-2xl text-gray-500 hover:text-black transition-colors cursor-pointer bg-transparent border-none"
       aria-label="Next"
-      onclick={() => (activeIndex = (activeIndex + 1) % count)}>&rarr;</button
+      onclick={() => (rotation += 1)}>&rarr;</button
     >
   </div>
   <!-- 3D scene -->
@@ -71,7 +78,7 @@
           width: {ITEM_SIZE}px;
           height: {ITEM_SIZE}px;
           transform-style: preserve-3d;
-          transform: rotateY({-activeIndex * angleStep}deg);
+          transform: rotateY({-rotation * angleStep}deg);
           transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         "
       >
@@ -105,14 +112,9 @@
     </div>
   </div>
 
-  <!-- Title of the front item -->
   <p
     class="text-lg text-gray-800 font-semibold text-center min-h-[1.8em] transition-opacity duration-300"
   >
     {items[activeIndex]?.data.title ?? ""}
   </p>
 </div>
-
-{#if selected}
-  <ItemModal item={selected} onclose={close} />
-{/if}
