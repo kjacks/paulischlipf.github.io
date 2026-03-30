@@ -19,7 +19,7 @@
 
   function open(item) {
     selected = item;
-    location.hash = item.id;
+    history.pushState(null, "", `#${item.id}`);
   }
 
   function close() {
@@ -29,7 +29,7 @@
 </script>
 
 <div
-  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 justify-between"
+  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-between"
 >
   {#each items as item, i}
     <button
@@ -48,9 +48,10 @@
           alt={item.data.title}
           loading="lazy"
           decoding="async"
-          style="opacity: {i < visibleCount ? 1 : 0}; transition: opacity 500ms ease, scale 300ms ease-in-out;"
-          class="w-full h-full object-cover group-hover:scale-105"
-          />
+          style="opacity: {i < visibleCount
+            ? 1
+            : 0}; transition: opacity 500ms ease, scale 300ms ease-in-out;"
+          class="w-full h-full object-cover group-hover:scale-110"
         />
       {:else}
         <div class="w-full h-full bg-gray-200"></div>
