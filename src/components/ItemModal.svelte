@@ -1,6 +1,6 @@
 <script>
   import { fade, fly } from "svelte/transition";
-  import { date } from "astro:schema";
+  import ItemDetails from "./ItemDetails.svelte";
 
   let { item, onclose } = $props();
 
@@ -40,24 +40,6 @@
       />
     {/if}
 
-    <div class="p-6">
-      <h2 class="text-xl font-semibold">
-        {item.data.title}
-      </h2>
-      <p class="text-sm text-gray-500 mt-1">
-        {item.data.date.toLocaleDateString("de-DE", {
-          year: "numeric",
-        })}
-      </p>
-      {#if item.data.dimensions}
-        <p class="mt-4 text-gray-700">{item.data.dimensions}</p>
-      {/if}
-      {#if item.data.medium}
-        <p class="mt-4 text-gray-700">{item.data.medium}</p>
-      {/if}
-      {#if item.data.description}
-        <p class="mt-4 text-gray-700">{item.data.description}</p>
-      {/if}
-    </div>
+    <ItemDetails {item} />
   </div>
 </div>

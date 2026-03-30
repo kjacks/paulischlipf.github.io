@@ -1,5 +1,5 @@
 <script>
-  import ItemModal from "./ItemModal.svelte";
+  import ItemDetails from "./ItemDetails.svelte";
 
   let { items } = $props();
 
@@ -8,6 +8,7 @@
   // takes the shortest path and never jumps.
   let rotation = $state(0);
   const activeIndex = $derived(((rotation % count) + count) % count);
+  const activeItem = $derived(items[activeIndex]);
 
   const ITEM_SIZE = 180;
   const count = items.length;
@@ -112,9 +113,5 @@
     </div>
   </div>
 
-  <p
-    class="text-lg text-gray-800 font-semibold text-center min-h-[1.8em] transition-opacity duration-300"
-  >
-    {items[activeIndex]?.data.title ?? ""}
-  </p>
+  <ItemDetails item={activeItem} classlist="text-center" />
 </div>
