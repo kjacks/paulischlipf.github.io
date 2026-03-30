@@ -117,4 +117,3 @@
 {#if selected}
   <ItemModal item={selected} onclose={close} />
 {/if}
-

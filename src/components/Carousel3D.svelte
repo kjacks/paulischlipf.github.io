@@ -36,12 +36,28 @@
 <svelte:window on:keydown={onKeydown} />
 
 <div class="w-full flex flex-col items-center gap-8 py-12">
+  <!-- Prev / Next arrows -->
+  <div class="flex gap-6">
+    <button
+      type="button"
+      class="text-2xl text-gray-500 hover:text-black transition-colors cursor-pointer bg-transparent border-none"
+      aria-label="Previous"
+      onclick={() => (activeIndex = (activeIndex - 1 + count) % count)}
+      >&larr;</button
+    >
+    <button
+      type="button"
+      class="text-2xl text-gray-500 hover:text-black transition-colors cursor-pointer bg-transparent border-none"
+      aria-label="Next"
+      onclick={() => (activeIndex = (activeIndex + 1) % count)}>&rarr;</button
+    >
+  </div>
   <!-- 3D scene -->
   <div
     class="relative"
     style="
       width: 100%;
-      height: {radius * 2 + ITEM_SIZE}px;
+      height: {radius}px;
       perspective: 1200px;
     "
   >
@@ -90,25 +106,11 @@
   </div>
 
   <!-- Title of the front item -->
-  <p class="text-lg text-gray-800 font-semibold text-center min-h-[1.8em] transition-opacity duration-300">
+  <p
+    class="text-lg text-gray-800 font-semibold text-center min-h-[1.8em] transition-opacity duration-300"
+  >
     {items[activeIndex]?.data.title ?? ""}
   </p>
-
-  <!-- Prev / Next arrows -->
-  <div class="flex gap-6">
-    <button
-      type="button"
-      class="text-2xl text-gray-500 hover:text-black transition-colors cursor-pointer bg-transparent border-none"
-      aria-label="Previous"
-      onclick={() => (activeIndex = (activeIndex - 1 + count) % count)}
-    >&larr;</button>
-    <button
-      type="button"
-      class="text-2xl text-gray-500 hover:text-black transition-colors cursor-pointer bg-transparent border-none"
-      aria-label="Next"
-      onclick={() => (activeIndex = (activeIndex + 1) % count)}
-    >&rarr;</button>
-  </div>
 </div>
 
 {#if selected}
