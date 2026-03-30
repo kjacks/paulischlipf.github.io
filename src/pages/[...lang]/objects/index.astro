@@ -5,9 +5,10 @@ import {
   useTranslations,
   localePath,
   alternateLang,
+  getLocalizedObject,
   dateLocales,
-  type Lang,
 } from "../../../i18n/translations";
+import Carousel3D from "../../../components/Carousel3D.svelte";
 
 export function getStaticPaths() {
   return [
@@ -16,13 +17,13 @@ export function getStaticPaths() {
   ];
 }
 
-const { lang } = Astro.props as { lang: Lang };
+const { lang } = Astro.props;
 const t = useTranslations(lang);
 const prefix = localePath(lang);
 
-const objects = (
-  await getCollection("objects", ({ data }) => !data.draft)
-).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const objects = (await getCollection("objects"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .map((item) => ({ ...item, data: getLocalizedObject(item.data, lang) }));
 ---
 
 <SiteLayout
@@ -31,37 +32,6 @@ const objects = (
   altHref={`${localePath(alternateLang(lang))}/objects`}
 >
   <main>
-    <h1>{t("objects.title")}</h1>
-    <ul>
-      {
-        objects.map((object) => (
-          <li>
-            <a href={`${prefix}/objects/${object.id}`}>
-              <strong>
-                {lang === "en" ? object.data.title_en : object.data.title_de}
-              </strong>
-              {lang === "en"
-                ? object.data.medium_en && (
-                    <span> — {object.data.medium_en}</span>
-                  )
-                : object.data.medium_de && (
-                    <span> — {object.data.medium_de}</span>
-                  )}
-            </a>
-            <p>
-              {lang === "en"
-                ? object.data.description_en
-                : object.data.description_de}
-            </p>
-            <time>
-              {object.data.date.toLocaleDateString(dateLocales[lang], {
-                year: "numeric",
-                month: "long",
-              })}
-            </time>
-          </li>
-        ))
-      }
-    </ul>
+    <Carousel3D items={objects} client:load />
   </main>
 </SiteLayout>

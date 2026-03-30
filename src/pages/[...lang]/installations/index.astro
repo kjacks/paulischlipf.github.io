@@ -5,9 +5,10 @@ import {
   useTranslations,
   localePath,
   alternateLang,
+  getLocalizedObject,
   dateLocales,
-  type Lang,
 } from "../../../i18n/translations";
+import FloatingGallery from "../../../components/FloatingGallery.svelte";
 
 export function getStaticPaths() {
   return [
@@ -16,13 +17,13 @@ export function getStaticPaths() {
   ];
 }
 
-const { lang } = Astro.props as { lang: Lang };
+const { lang } = Astro.props;
 const t = useTranslations(lang);
 const prefix = localePath(lang);
 
-const installations = (
-  await getCollection("installations", ({ data }) => !data.draft)
-).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const installations = (await getCollection("installations"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .map((item) => ({ ...item, data: getLocalizedObject(item.data, lang) }));
 ---
 
 <SiteLayout
@@ -31,39 +32,6 @@ const installations = (
   altHref={`${localePath(alternateLang(lang))}/installations`}
 >
   <main>
-    <h1>{t("installations.title")}</h1>
-    <ul>
-      {
-        installations.map((installation) => (
-          <li>
-            <a href={`${prefix}/installations/${installation.id}`}>
-              <strong>
-                {lang === "en"
-                  ? installation.data.title_en
-                  : installation.data.title_de}
-              </strong>
-              {lang === "en"
-                ? installation.data.location_en && (
-                    <span> — {installation.data.location_en}</span>
-                  )
-                : installation.data.location_de && (
-                    <span> — {installation.data.location_de}</span>
-                  )}
-            </a>
-            <p>
-              {lang === "en"
-                ? installation.data.description_en
-                : installation.data.description_de}
-            </p>
-            <time>
-              {installation.data.date.toLocaleDateString(dateLocales[lang], {
-                year: "numeric",
-                month: "long",
-              })}
-            </time>
-          </li>
-        ))
-      }
-    </ul>
+    <FloatingGallery items={installations} client:load />
   </main>
 </SiteLayout>

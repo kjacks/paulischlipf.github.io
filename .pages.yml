@@ -145,7 +145,7 @@ content:
         type: image
 
   - name: contact
-    label: Contact / Kontakt
+    label: Contact
     type: file
     path: src/content/contact/index.md
     fields:
